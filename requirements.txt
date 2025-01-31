@@ -1,7 +1,10 @@
-
+Flask
+gunicorn
 numpy
-matplotlib
-seaborn
-tensorflow
-scikit-learn
 opencv-python
+tensorflow
+keras
+matplotlib
+scikit-learn
+h5py
+pillow

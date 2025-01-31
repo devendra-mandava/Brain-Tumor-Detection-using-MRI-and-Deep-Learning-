@@ -1,101 +1,129 @@
+# 🧠 NeuroSeg - Brain Tumor Segmentation AI
 
-# Brain Tumor Detection Using MRI Images
+**NeuroSeg** is a deep learning-based **Brain Tumor Segmentation** system that analyzes MRI scans and highlights tumor regions. The project uses **U-Net** for segmentation and a **Flask backend** for processing, with a clean **frontend interface** to upload and visualize results.
 
-This project aims to detect brain tumors from MRI images using a Convolutional Neural Network (CNN). The dataset contains MRI images labeled as either having a brain tumor (`yes`) or not having a brain tumor (`no`). The project involves preprocessing the images, training a CNN, evaluating its performance, and visualizing the results.
+🚀 **Live Demo:** *(Coming Soon after deployment)*  
+📂 **Dataset Used:** [LGG Segmentation Dataset](https://www.kaggle.com/datasets/mateuszbuda/lgg-segmentation)  
+🔗 **GitHub Repo:** [NeuroSeg](https://github.com/mystichronicle/NeuroSeg)  
 
-## Table of Contents
+---
 
-- [Brain Tumor Detection Using MRI Images](#brain-tumor-detection-using-mri-images)
-  - [Table of Contents](#table-of-contents)
-  - [Introduction](#introduction)
-  - [Dataset](#dataset)
-  - [Project Structure](#project-structure)
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [Results](#results)
-  - [Contributing](#contributing)
-  - [License](#license)
+## **📌 Features**
+✔ **MRI Scan Upload:** Users can upload an MRI scan of the brain.  
+✔ **AI-Based Segmentation:** The model detects tumor regions in the image.  
+✔ **Processed Image Output:** The result is displayed with an overlay on the original image.  
+✔ **Fast & Accurate:** Uses **U-Net** for high-precision segmentation.  
+✔ **Web-Based Interface:** Simple **frontend UI** with **drag & drop upload.**  
+✔ **Fully Deployed:** Works online via **Flask (Backend) + GitHub Pages (Frontend).**  
 
-## Introduction
+---
 
-Brain tumors are abnormal growths of cells in the brain that can be benign or malignant. Detecting brain tumors early is crucial for effective treatment. This project uses deep learning techniques to automate the detection of brain tumors from MRI images.
+## **📌 Technologies Used**
+### **Backend (API)**
+- 🐍 **Python 3.10**
+- ⚙ **Flask** (for web API)
+- 🔬 **TensorFlow/Keras** (for deep learning)
+- 🖼 **OpenCV** (for image processing)
+- 🗂 **NumPy, Matplotlib** (for visualization)
+- 🛠 **Gunicorn** (for deployment)
 
-## Dataset
+### **Frontend (Web App)**
+- 🌐 **HTML, CSS, JavaScript**
+- 🎨 **Modern UI with CSS Flexbox/Grid**
+- ⚡ **GitHub Pages for free hosting**
 
-The dataset used in this project contains MRI images labeled as either `no` (no brain tumor) or `yes` (brain tumor). The dataset is organized into two directories:
+---
 
-- `no`: Images without brain tumors.
-- `yes`: Images with brain tumors.
-
-This dataset can be found in **Kaggle**: [Brain MRI Images for Brain Tumor Detection](https://www.kaggle.com/datasets/navoneel/brain-mri-images-for-brain-tumor-detection)
-
-## Project Structure
-
-The project has the following structure:
-
-```
-Brain-Tumor-Detection/
-├── brain_mri_images/
-│   ├── no/
-│   ├── yes/
-├── Brain_MRI_Analysis.ipynb
-├── README.md
-└── requirements.txt
+## **📌 Installation & Setup**
+### **1️⃣ Clone the Repository**
+```bash
+git clone https://github.com/mystichronicle/NeuroSeg.git
+cd NeuroSeg
 ```
 
-- `brain_mri_images/`: Contains the MRI images dataset.
-- `Brain_MRI_Analysis.ipynb`: Jupyter Notebook with the full analysis and model training.
-- `README.md`: Project documentation.
-- `requirements.txt`: List of dependencies required for the project.
-
-## Installation
-
-To run this project, you need to have Python and Jupyter Notebook installed. You can install the required dependencies using the following command:
-
-```sh
+### **2️⃣ Set Up Python Environment**
+```bash
+python3 -m venv venv
+source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 pip install -r requirements.txt
 ```
 
-The `requirements.txt` file contains:
-
+### **3️⃣ Run Flask API Locally**
+```bash
+cd backend
+python app.py
 ```
-numpy
-matplotlib
-seaborn
-tensorflow
-scikit-learn
-opencv-python
+🚀 API will be running at **http://127.0.0.1:5580/**
+
+### **4️⃣ Open Frontend**
+Open **frontend/index.html** in your browser.
+
+---
+
+## **📌 Usage Guide**
+1️⃣ Upload an MRI scan (.png/.jpg/.tif).  
+2️⃣ Click **"Upload & Analyze"**.  
+3️⃣ The AI will process and highlight tumor regions.  
+4️⃣ The processed image will be displayed.  
+
+---
+
+## **📌 Deployment Steps**
+### **Backend (Flask API) - Hosted on Render**
+1️⃣ Push code to GitHub  
+2️⃣ Deploy Flask API using Render  
+3️⃣ Set start command:
+```bash
+gunicorn --bind 0.0.0.0:10000 backend.app:app
+```
+4️⃣ Get live API URL (e.g., **https://neuroseg.onrender.com**)
+
+### **Frontend (Web App) - Hosted on GitHub Pages**
+1️⃣ Move frontend files to **/frontend/**  
+2️⃣ Push frontend to GitHub  
+3️⃣ Enable **GitHub Pages** (Settings → Pages → Select main)  
+4️⃣ The frontend will be live at:  
+```bash
+https://mystichronicle.github.io/NeuroSeg-Frontend/
 ```
 
-## Usage
+---
 
-1. **Clone the repository:**
-
-```sh
-git clone https://github.com/debjit-mandal/Brain-Tumor-Detection.git
-cd Brain-Tumor-Detection
+## **📌 File Structure**
+```
+NeuroSeg/
+│── backend/              # Flask Backend
+│   ├── app.py            # Flask main app
+│   ├── models/           # Deep Learning models
+│   ├── preprocessing/    # Data processing scripts
+│   ├── templates/        # HTML frontend for Flask
+│   ├── static/           # Static CSS & JS
+│   ├── uploads/          # Stores uploaded MRI scans
+│── frontend/             # Standalone Web App (GitHub Pages)
+│   ├── index.html        # Main Web Page
+│   ├── static/           # JS, CSS, Images
+│── data/                 # Dataset (MRI Scans)
+│── models/               # Trained models (.h5 files)
+│── README.md             # Project Documentation
+│── requirements.txt      # Python dependencies
 ```
 
-2. **Download the dataset:**
 
-Place the `no` and `yes` directories containing the MRI images into the `brain_mri_images/` directory.
+---
 
-3. **Run the Jupyter Notebook:**
 
-```sh
-jupyter notebook Brain_MRI_Analysis.ipynb
-```
+🤝 Want to contribute? Open a **Pull Request!**  
 
-Follow the steps in the notebook to preprocess the data, train the model, and evaluate its performance.
+---
 
-## Results
+## **📌 License**
+This project is open-source under the **MIT License**.  
+Feel free to use, modify, and share! 🚀  
 
-The model's performance is evaluated using metrics such as accuracy, precision, recall, and F1-score. The notebook includes visualizations of the training process and the results, including confusion matrices and plots of accuracy and loss over epochs.
+---
 
-## Contributing
-
-Contributions are welcome! If you have any suggestions or improvements, please create an issue or submit a pull request.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+## **📌 Acknowledgments**
+🧠 Inspired by the **LGG Segmentation Dataset**  
+📄 **Citations:**
+- Mateusz Buda, et al. *"Radiogenomics of lower-grade glioma"*
+- *U-Net: Convolutional Networks for Biomedical Image Segmentation*

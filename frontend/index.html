@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroSeg - AI Brain Tumor Segmentation</title>
+    <link rel="stylesheet" href="static/style.css">
+    <script defer src="static/script.js"></script>
+</head>
+<body>
+    <header>
+        <h1>🧠 NeuroSeg</h1>
+        <p>AI-powered Brain Tumor Segmentation from MRI Scans</p>
+    </header>
+
+    <section class="upload-box">
+        <h2>📤 Upload Your MRI Scan</h2>
+        <p>Select an image and let the AI analyze it.</p>
+        <input type="file" id="imageInput" accept="image/*">
+        <button onclick="uploadImage()">Upload & Analyze</button>
+    </section>
+
+    <section class="results">
+        <div class="image-container">
+            <div class="image-box">
+                <h3>📥 Uploaded Image</h3>
+                <img id="uploadedImage" class="hidden" alt="Uploaded MRI Scan">
+            </div>
+
+            <div class="image-box">
+                <h3>📊 Processed Image</h3>
+                <img id="outputImage" class="hidden" alt="Tumor Segmentation Result">
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 NeuroSeg | Developed with ❤️</p>
+    </footer>
+</body>
+</html>

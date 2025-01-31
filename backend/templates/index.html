@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NeuroSeg - Brain Tumor Segmentation</title>
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>NeuroSeg</h1>
+      <p>
+        Upload an MRI scan, and our AI will detect and highlight brain tumors.
+      </p>
+
+      <div class="upload-section">
+        <input type="file" id="imageInput" accept="image/*" />
+        <button onclick="uploadImage()">Upload & Analyze</button>
+      </div>
+
+      <div class="image-preview">
+        <h3>Uploaded Image:</h3>
+        <img id="uploadedImage" src="" class="hidden" />
+      </div>
+
+      <div class="image-preview">
+        <h3>Processed Image:</h3>
+        <img id="outputImage" src="" class="hidden" />
+      </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="/static/script.js"></script>
+  </body>
+</html>
