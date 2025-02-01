@@ -25,12 +25,10 @@ function uploadImage() {
             alert("Error: " + data.error);
             console.error("Server Error:", data.error);
         } else {
-            // Display uploaded image
             let uploadedImage = document.getElementById("uploadedImage");
             uploadedImage.src = URL.createObjectURL(input.files[0]);
             uploadedImage.classList.remove("hidden");
 
-            // Force reload processed image by appending a timestamp
             let outputImage = document.getElementById("outputImage");
             outputImage.src = data.output_image + "?t=" + new Date().getTime();
             outputImage.classList.remove("hidden");

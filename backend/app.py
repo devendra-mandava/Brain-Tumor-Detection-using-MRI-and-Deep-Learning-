@@ -1,27 +1,52 @@
 import os
 import numpy as np
 import cv2
+import gdown
 import tensorflow as tf
 from flask import Flask, request, jsonify, render_template, send_from_directory
 from werkzeug.utils import secure_filename
 
-# Define paths
-UPLOAD_FOLDER = "/home/debjit/Programming/ML/BrainTumorSegmentation/backend/uploads/"
-MODEL_PATH = "/home/debjit/Programming/ML/BrainTumorSegmentation/models/unet_brain_segmentation.h5"
+DATA_FOLDER_ID = "1IvKCI67sYBxZZZOPz5YPRJIFpWVrRdjf"  
+MODEL_FILE_ID = "1yafZdUtwbhFIy2fDFtzkMj3ld5ZINLTV"  
 
-# Create Flask app
+BASE_DIR = "/home/debjit/Programming/ML/BrainTumorSegmentation"
+UPLOAD_FOLDER = os.path.join(BASE_DIR, "backend/uploads/")
+MODEL_PATH = os.path.join(BASE_DIR, "models/unet_brain_segmentation.h5")
+DATA_PATH = os.path.join(BASE_DIR, "data/")
+
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
+os.makedirs(DATA_PATH, exist_ok=True)
+
 app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
-# Load UNet model
+
+
+def download_data():
+    if not os.path.exists(DATA_PATH) or len(os.listdir(DATA_PATH)) == 0:
+        print("🔽 Data folder not found! Downloading from Google Drive...")
+        gdown.download_folder(
+            f"https://drive.google.com/drive/folders/{DATA_FOLDER_ID}", output=DATA_PATH, quiet=False)
+        print("✅ Data folder downloaded successfully!")
+
+
+
+def download_model():
+    if not os.path.exists(MODEL_PATH):
+        print("🔽 Model file not found! Downloading from Google Drive...")
+        gdown.download(
+            f"https://drive.google.com/uc?id={MODEL_FILE_ID}", MODEL_PATH, quiet=False)
+        print("✅ Model downloaded successfully!")
+
+
+download_data()
+download_model()
+
 print("📥 Loading trained UNet model...")
 model = tf.keras.models.load_model(MODEL_PATH)
 print("✅ Model loaded successfully!")
 
-# Ensure upload directory exists
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
-# Allowed image extensions
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
 
 
@@ -49,7 +74,6 @@ def upload_file():
         file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
         file.save(file_path)
 
-        # Perform segmentation
         output_path = segment_brain_tumor(file_path)
 
         return jsonify({"message": "File uploaded successfully", "output_image": output_path})
@@ -63,46 +87,35 @@ def uploaded_file(filename):
 
 
 def segment_brain_tumor(image_path):
-    # Load and preprocess the uploaded MRI scan
     img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     original_shape = img.shape
     img_resized = cv2.resize(img, (256, 256)) / 255.0
-    # Add batch & channel dimension
     img_resized = np.expand_dims(img_resized, axis=(0, -1))
 
-    # Predict segmentation mask
     predicted_mask = model.predict(img_resized)[0]
     predicted_mask = (predicted_mask > 0.5).astype(np.uint8)
 
-    # Resize mask back to original image size
     predicted_mask_resized = cv2.resize(
         predicted_mask, (original_shape[1], original_shape[0]))
 
-    # Debugging: Print mask statistics
     print(f"🔍 Predicted Mask Sum: {np.sum(predicted_mask_resized)}")
 
-
-    # Ensure non-empty mask by adjusting contrast
-    # Ensure non-empty mask by adjusting contrast
     if np.sum(predicted_mask_resized) == 0:
         print("⚠️ Warning: Model output is empty! Adjusting contrast...")
         predicted_mask_resized = predicted_mask_resized.astype(
-            np.float32)  # Convert to float before adding
-        predicted_mask_resized += 0.2  # Boost contrast slightly
+            np.float32)
+        predicted_mask_resized += 0.2
         predicted_mask_resized = np.clip(
-            predicted_mask_resized, 0, 1)  # Ensure values stay in range
-        # Convert back to uint8
-        predicted_mask_resized = (predicted_mask_resized * 255).astype(np.uint8)
+            predicted_mask_resized, 0, 1)
+        predicted_mask_resized = (
+            predicted_mask_resized * 255).astype(np.uint8)
 
-    # Overlay prediction on original MRI scan
     overlay = cv2.addWeighted(img, 0.7, predicted_mask_resized * 255, 0.3, 0)
 
-    # Save output image
     output_filename = "output.png"
     output_path = os.path.join(app.config["UPLOAD_FOLDER"], output_filename)
     cv2.imwrite(output_path, overlay)
 
-    # Verify output image exists
     if not os.path.exists(output_path):
         print("❌ ERROR: Output image was not saved!")
         return None
@@ -110,5 +123,6 @@ def segment_brain_tumor(image_path):
     print(f"✅ Output image saved at {output_path}")
     return f"/uploads/{output_filename}"
 
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5580, debug=True)  # Running on Port 5580
+    app.run(host="0.0.0.0", port=5580, debug=True)

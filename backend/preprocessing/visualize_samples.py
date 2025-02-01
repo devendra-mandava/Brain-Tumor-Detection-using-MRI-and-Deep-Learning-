@@ -1,19 +1,16 @@
 import matplotlib
-matplotlib.use("Agg")  # Use non-interactive backend
+matplotlib.use("Agg")  
 
 import matplotlib.pyplot as plt
 import cv2
 import os
 
-# Define absolute paths
 MRI_PATH = "/home/debjit/Programming/ML/BrainTumorSegmentation/data/processed/mri_scans/"
 MASK_PATH = "/home/debjit/Programming/ML/BrainTumorSegmentation/data/processed/tumor_masks/"
 
-# Get list of saved images
 mri_files = sorted(os.listdir(MRI_PATH))[:5]
 mask_files = sorted(os.listdir(MASK_PATH))[:5]
 
-# Plot images
 fig, axes = plt.subplots(5, 2, figsize=(10, 15))
 
 for i, (mri_file, mask_file) in enumerate(zip(mri_files, mask_files)):
@@ -28,6 +25,5 @@ for i, (mri_file, mask_file) in enumerate(zip(mri_files, mask_files)):
 
 plt.tight_layout()
 
-# Save the plot instead of showing it
 plt.savefig("sample_visualization.png")
 print("✅ Visualization saved as 'sample_visualization.png'")
