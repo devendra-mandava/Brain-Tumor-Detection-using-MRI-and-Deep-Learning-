@@ -7,7 +7,7 @@ import tensorflow as tf
 from flask import Flask, request, jsonify, render_template, send_from_directory
 from werkzeug.utils import secure_filename
 
-DATA_ZIP_ID = "1ABCDEF12345678"
+DATA_ZIP_ID = "14SM_tgVC26Q4QWZ0FCkWv_kP1Kv-lKV6"
 MODEL_FILE_ID = "1yafZdUtwbhFIy2fDFtzkMj3ld5ZINLTV"
 
 BASE_DIR = os.getcwd()
