@@ -2,17 +2,19 @@ import os
 import numpy as np
 import cv2
 import gdown
+import zipfile
 import tensorflow as tf
 from flask import Flask, request, jsonify, render_template, send_from_directory
 from werkzeug.utils import secure_filename
 
-DATA_FOLDER_ID = "1IvKCI67sYBxZZZOPz5YPRJIFpWVrRdjf"
+DATA_ZIP_ID = "1ABCDEF12345678"
 MODEL_FILE_ID = "1yafZdUtwbhFIy2fDFtzkMj3ld5ZINLTV"
 
 BASE_DIR = os.getcwd()
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads/")
 MODEL_PATH = os.path.join(BASE_DIR, "models/unet_brain_segmentation.h5")
 DATA_PATH = os.path.join(BASE_DIR, "data/")
+DATA_ZIP_PATH = os.path.join(BASE_DIR, "data.zip")
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
@@ -22,12 +24,17 @@ app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 
-def download_data():
+def download_and_extract_data():
     if not os.path.exists(DATA_PATH) or len(os.listdir(DATA_PATH)) == 0:
-        print("🔽 Data folder not found! Downloading from Google Drive...")
-        gdown.download_folder(
-            f"https://drive.google.com/drive/folders/{DATA_FOLDER_ID}", output=DATA_PATH, quiet=False)
-        print("✅ Data folder downloaded successfully!")
+        print("🔽 Data folder not found! Downloading ZIP from Google Drive...")
+        gdown.download(
+            f"https://drive.google.com/uc?id={DATA_ZIP_ID}", DATA_ZIP_PATH, quiet=False)
+
+        print("📦 Extracting dataset...")
+        with zipfile.ZipFile(DATA_ZIP_PATH, "r") as zip_ref:
+            zip_ref.extractall(BASE_DIR)
+
+        print("✅ Data extracted successfully!")
 
 
 def download_model():
@@ -38,7 +45,7 @@ def download_model():
         print("✅ Model downloaded successfully!")
 
 
-download_data()
+download_and_extract_data()
 download_model()
 
 print("📥 Loading trained UNet model...")
