@@ -6,11 +6,11 @@ import tensorflow as tf
 from flask import Flask, request, jsonify, render_template, send_from_directory
 from werkzeug.utils import secure_filename
 
-DATA_FOLDER_ID = "1IvKCI67sYBxZZZOPz5YPRJIFpWVrRdjf"  
-MODEL_FILE_ID = "1yafZdUtwbhFIy2fDFtzkMj3ld5ZINLTV"  
+DATA_FOLDER_ID = "1IvKCI67sYBxZZZOPz5YPRJIFpWVrRdjf"
+MODEL_FILE_ID = "1yafZdUtwbhFIy2fDFtzkMj3ld5ZINLTV"
 
-BASE_DIR = "/home/debjit/Programming/ML/BrainTumorSegmentation"
-UPLOAD_FOLDER = os.path.join(BASE_DIR, "backend/uploads/")
+BASE_DIR = os.getcwd()
+UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads/")
 MODEL_PATH = os.path.join(BASE_DIR, "models/unet_brain_segmentation.h5")
 DATA_PATH = os.path.join(BASE_DIR, "data/")
 
@@ -22,14 +22,12 @@ app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 
-
 def download_data():
     if not os.path.exists(DATA_PATH) or len(os.listdir(DATA_PATH)) == 0:
         print("🔽 Data folder not found! Downloading from Google Drive...")
         gdown.download_folder(
             f"https://drive.google.com/drive/folders/{DATA_FOLDER_ID}", output=DATA_PATH, quiet=False)
         print("✅ Data folder downloaded successfully!")
-
 
 
 def download_model():
@@ -125,4 +123,4 @@ def segment_brain_tumor(image_path):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5580, debug=True)
+    app.run(host="0.0.0.0", port=10000, debug=True)
