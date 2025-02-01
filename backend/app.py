@@ -23,6 +23,9 @@ os.makedirs(DATA_PATH, exist_ok=True)
 app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
+tf.config.set_visible_devices([], 'GPU')
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+
 
 def download_and_extract_data():
     if not os.path.exists(DATA_PATH) or len(os.listdir(DATA_PATH)) == 0:
@@ -48,9 +51,14 @@ def download_model():
 download_and_extract_data()
 download_model()
 
-print("📥 Loading trained UNet model...")
-model = tf.keras.models.load_model(MODEL_PATH)
-print("✅ Model loaded successfully!")
+
+def load_model():
+    global model
+    if "model" not in globals():
+        print("📥 Loading trained UNet model...")
+        model = tf.keras.models.load_model(MODEL_PATH)
+        print("✅ Model loaded successfully!")
+
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
 
@@ -92,6 +100,8 @@ def uploaded_file(filename):
 
 
 def segment_brain_tumor(image_path):
+    load_model()
+
     img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     original_shape = img.shape
     img_resized = cv2.resize(img, (256, 256)) / 255.0
