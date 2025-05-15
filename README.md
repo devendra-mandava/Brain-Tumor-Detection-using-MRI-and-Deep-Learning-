@@ -1,4 +1,4 @@
-# 🧠 NeuroSeg - Brain Tumor Segmentation AI
+Brain Tumor Detection using MRI and Deep Learning
 
 **NeuroSeg** is a deep learning-based **Brain Tumor Segmentation** system that analyzes MRI scans and highlights tumor regions. The project uses **U-Net** for segmentation and a **Flask backend** for processing, with a clean **frontend interface** to upload and visualize results.
 
